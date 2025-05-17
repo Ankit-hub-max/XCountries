@@ -26,9 +26,14 @@ const ENDPOINT="https://xcountries-backend.azurewebsites.net/all";
 function Countries(){
 const [apiData,SetApiData]=useState([]);
 useEffect(()=>{
-    fetch(ENDPOINT).then(response=>
-        response.json()).then((data)=>{SetApiData(data)}).catch((error)=>
-            console.error("Error Fetching data: ",error))
+    fetch(ENDPOINT).then((response)=>{
+        if(!response.ok){
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+        .then((data)=>{SetApiData(data)}).catch((error)=>
+            console.error("Error Fetching data: ",error.message || error))
 },[])
 return( 
 <div style={{display:"flex",
